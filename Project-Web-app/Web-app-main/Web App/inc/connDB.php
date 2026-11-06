@@ -23,20 +23,13 @@ class Database
 
     public function __construct()
     {
-        // 1. ดึงการตั้งค่าจาก Environment Variables (รองรับ Railway, VPS, Docker, Localhost)
-        $this->host     = getenv('MYSQLHOST') ?: (getenv('DB_HOST') ?: 'crossover.proxy.rlwy.net');
-        $this->port     = (int)(getenv('MYSQLPORT') ?: (getenv('DB_PORT') ?: 31107));
-        $this->username = getenv('MYSQLUSER') ?: (getenv('DB_USER') ?: 'root');
-        $this->password = getenv('MYSQLPASSWORD') ?: (getenv('DB_PASS') ?: 'XyzEXAPRbKhlMIRSWyVtpZdYmmbzjbhL');
-        $this->dbname   = getenv('MYSQLDATABASE') ?: (getenv('DB_NAME') ?: 'railway');
-
-        // Fallback เพิ่มเติมกรณีรัน Localhost XAMPP / MAMP ทั่วไป
-        if ($this->host === 'localhost' || $this->host === '127.0.0.1') {
-            $this->port     = (int)(getenv('DB_PORT') ?: 3306);
-            $this->username = getenv('DB_USER') ?: 'root';
-            $this->password = getenv('DB_PASS') ?: '';
-            $this->dbname   = getenv('DB_NAME') ?: 'northwind';
-        }
+        // ดึงการตั้งค่าจาก Environment Variables (รองรับ Railway, VPS, Docker, Localhost)
+        // ไม่เก็บรหัสผ่านไว้ในโค้ด ถ้าไม่มี env จะใช้ค่าเริ่มต้นสำหรับรันในเครื่อง (XAMPP / MAMP)
+        $this->host     = getenv('MYSQLHOST')     ?: getenv('DB_HOST') ?: 'localhost';
+        $this->port     = (int)(getenv('MYSQLPORT') ?: getenv('DB_PORT') ?: 3306);
+        $this->username = getenv('MYSQLUSER')     ?: getenv('DB_USER') ?: 'root';
+        $this->password = getenv('MYSQLPASSWORD') ?: getenv('DB_PASS') ?: '';
+        $this->dbname   = getenv('MYSQLDATABASE') ?: getenv('DB_NAME') ?: 'northwind';
     }
 
     /**
